@@ -1,13 +1,17 @@
 package org.nhnnext.ellen.Bowling;
 
 public class Frame {
-	private int firstPoint;
-	private int secondPoint;
+	public int firstPoint;
+	public int secondPoint;
+	public int thirdPoint;
+	public int accScore;
 
-	public Frame(int firstPoint, int secondPoint) {
+	public Frame(int firstPoint, int secondPoint, int thirdPoint) {
 		this.firstPoint = firstPoint;
 		this.secondPoint = secondPoint;
+		this.thirdPoint = thirdPoint;
 	}
+
 	
 	public boolean isStrike() {
 		return (firstPoint == 10);

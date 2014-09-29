@@ -13,7 +13,7 @@ public class Bowling {
 		Player player[] = new Player[numOfPlayer];
 		
 		for (int i = 0; i < numOfPlayer ; i++) {
-			System.out.println((i+1) + "번째 player의 이름을 입력하세요!");
+			System.out.println((i + 1) + "번째 player의 이름을 입력하세요!");
 			String name = scanner.nextLine();
 			player[i] = new Player(name);
 		}
@@ -26,22 +26,21 @@ public class Bowling {
 				int firstPoint = Integer.parseInt(scanner.nextLine());
 				System.out.println(player[j].name + "의 두번째 점수를 입력하세요.");
 				int secondPoint = Integer.parseInt(scanner.nextLine());
+				int thirdPoint = 0;
 				
-				player[j].savePoint(frameNumber, firstPoint, secondPoint);
 				//TODO 스트라이크 나오면 두번째 스코어가 없잖아! 
 				//TODO 10번째 프레임이 스페어가 나오거나 스트라이크가 나오면 어떻게 할거야?
-			}
-			
-			
+				if ((frameNumber == 10) && (firstPoint+secondPoint == 10)) {
+					System.out.println(player[j].name + "의 세번째 점수를 입력하세요.");
+					thirdPoint = Integer.parseInt(scanner.nextLine());
+				}
+				
+				player[j].savePoint(frameNumber, firstPoint, secondPoint, thirdPoint);
+			}	
 		}
- 		
-		for (int i = 0; i < numOfPlayer; i++) {
-			System.out.println(player[i].name + "의 총점은 " + player[i].totalPoint + " 입니다.");
-		}
-		
-		
-		
-		
+	}
+	
+	public void printScoreBoard() {
 		
 	}
 
