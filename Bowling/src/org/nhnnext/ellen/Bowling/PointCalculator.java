@@ -2,12 +2,14 @@ package org.nhnnext.ellen.Bowling;
 
 public class PointCalculator {
 	
+	private static final int LAST_FRAME_NUM = 9;
+	
 	public void calculatePoint(Frame[] frame) {
 		int accScore = 0;
 
 		try {
 			for (int frameNumber=0; frameNumber < frame.length; frameNumber++) {
-				int frameScore = frame[frameNumber].firstPoint + frame[frameNumber].secondPoint;
+				int frameScore = frame[frameNumber].getScore();
 				int bonusScore = bonusScore(frame, frameNumber);
 				accScore += frameScore + bonusScore;
 				
@@ -22,19 +24,17 @@ public class PointCalculator {
 		int firstBonusPoint;
 		int secondBonusPoint;
 		
+		if (frameNumber == LAST_FRAME_NUM)
+			return 0;
+		
 		if (frame[frameNumber].isStrike()) {
-			if (frameNumber == 10) {
-				firstBonusPoint = frame[frameNumber].secondPoint;
-				secondBonusPoint = frame[frameNumber].thirdPoint;
-			}
-			
 			if (frame[frameNumber+1] == null)
 				throw new Exception("#");
-				
+			
 			firstBonusPoint = frame[frameNumber+1].firstPoint;
 			
-			if (firstBonusPoint == 10) {
-				if (frameNumber == 9) {
+			if (frame[frameNumber+1].isStrike()) {
+				if (frameNumber == LAST_FRAME_NUM - 1) {
 					secondBonusPoint = frame[frameNumber+1].secondPoint;
 				}
 				else {
@@ -49,9 +49,9 @@ public class PointCalculator {
 			
 			bonusScore = firstBonusPoint + secondBonusPoint;
 		}	
-		if (frame[frameNumber].isSpare()) {
-			if (frameNumber == 10) {
-				bonusScore = frame[frameNumber].thirdPoint;
+		else if (frame[frameNumber].isSpare()) {
+			if (frameNumber == LAST_FRAME_NUM) {
+				bonusScore = ((LastFrame)frame[frameNumber]).thirdPoint;
 			}
 				
 			else {
@@ -63,5 +63,4 @@ public class PointCalculator {
 		}
 		return bonusScore;
 	}
-	
 }

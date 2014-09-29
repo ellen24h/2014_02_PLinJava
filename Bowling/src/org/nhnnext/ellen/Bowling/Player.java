@@ -2,6 +2,8 @@ package org.nhnnext.ellen.Bowling;
 
 public class Player {
 	
+	private static final int LAST_FRAME_NUM = 9;
+
 	public String name;
 	private Frame[] frame = new Frame[10];
 	
@@ -11,7 +13,17 @@ public class Player {
 	}
 
 	public void savePoint(int frameNumber, int firstPoint, int secondPoint, int thirdPoint) {
-		frame[frameNumber] = new Frame(firstPoint, secondPoint, thirdPoint);
+		if (frameNumber == LAST_FRAME_NUM)
+			frame[frameNumber] = new LastFrame(firstPoint, secondPoint, thirdPoint);
+		else
+			frame[frameNumber] = new Frame(firstPoint, secondPoint);
+		
+		PointCalculator calculator = new PointCalculator();
+		calculator.calculatePoint(frame);
+	}
+	
+	public Frame[] getFrame() {
+		return frame;
 	}
 	
 	

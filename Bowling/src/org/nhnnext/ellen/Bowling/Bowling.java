@@ -4,44 +4,77 @@ import java.util.Scanner;
 
 public class Bowling {
 
+	private static final int LAST_FRAME_NUM = 9;
+
 	public static void main(String[] args) {
 		
-		System.out.println("몇 명이서 게임을 하나요?");
+		System.out.print("몇 명이서 게임을 하나요: ");
 		Scanner scanner = new Scanner(System.in);
-		int numOfPlayer = Integer.parseInt(scanner.nextLine());
+		int numOfPlayer = scanner.nextInt();
 		
 		Player player[] = new Player[numOfPlayer];
 		
-		for (int i = 0; i < numOfPlayer ; i++) {
-			System.out.println((i + 1) + "번째 player의 이름을 입력하세요!");
+		scanner.nextLine();
+for (int i = 0; i < numOfPlayer ; i++) {
+			System.out.print((i + 1) + "번째 player의 이름을 입력하세요: ");
 			String name = scanner.nextLine();
 			player[i] = new Player(name);
 		}
 		
 		
 		for (int frameNumber = 0; frameNumber < 10; frameNumber++) {
-			System.out.println("====" + frameNumber + "번째 프레임 ====");
+			System.out.println("====" + (frameNumber+1) + "번째 프레임 ====");
 			for (int j = 0; j < numOfPlayer; j++) {
-				System.out.println(player[j].name + "의 첫번째 점수를 입력하세요.");
-				int firstPoint = Integer.parseInt(scanner.nextLine());
-				System.out.println(player[j].name + "의 두번째 점수를 입력하세요.");
-				int secondPoint = Integer.parseInt(scanner.nextLine());
-				int thirdPoint = 0;
+				System.out.print(player[j].name + "의 첫번째 점수를 입력하세요: ");
+				int firstPoint = scanner.nextInt();
 				
-				//TODO 스트라이크 나오면 두번째 스코어가 없잖아! 
-				//TODO 10번째 프레임이 스페어가 나오거나 스트라이크가 나오면 어떻게 할거야?
-				if ((frameNumber == 10) && (firstPoint+secondPoint == 10)) {
-					System.out.println(player[j].name + "의 세번째 점수를 입력하세요.");
-					thirdPoint = Integer.parseInt(scanner.nextLine());
+				int secondPoint = 0;
+				if ( (frameNumber == LAST_FRAME_NUM) || (firstPoint < 10) )
+				{
+					System.out.print(player[j].name + "의 두번째 점수를 입력하세요: ");
+					secondPoint = scanner.nextInt();
+				}
+
+				int thirdPoint = 0;
+				if ((frameNumber == LAST_FRAME_NUM) && (firstPoint+secondPoint >= 10)) {
+					System.out.print(player[j].name + "의 세번째 점수를 입력하세요: ");
+					thirdPoint = scanner.nextInt();
 				}
 				
 				player[j].savePoint(frameNumber, firstPoint, secondPoint, thirdPoint);
+				printScoreBoard(player);
 			}	
 		}
 	}
-	
-	public void printScoreBoard() {
+
+	public static void printScoreBoard(Player[] players) {
+		System.out.println("======================================================");
+		for (Player player : players)
+		{
+			printScoreBoard(player);
+			System.out.println("======================================================");
+		}
+	}
+
+	public static void printScoreBoard(Player player) {
+		System.out.format("| %10s |", player.name);
 		
+		for (Frame frame : player.getFrame())
+		{
+			if ( frame == null )
+				break;
+			System.out.print(frame + "|");
+		}
+		System.out.println();
+
+		System.out.print("|            |");
+		for (Frame frame : player.getFrame())
+		{
+			if ( frame == null )
+				break;
+			System.out.format("%3s|", frame.getAccScore());
+		}
+		System.out.println();
 	}
 
 }
